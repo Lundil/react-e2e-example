@@ -1,4 +1,3 @@
-import cypress from './static/cypress.svg';
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import './App.css';
 
@@ -15,7 +14,7 @@ function Home() {
         <Header />
         <div className="page-content">
             <h1 className="main-tagline">
-                <img src={cypress} alt="" className="cypress-logo"/> Cypress example for React
+                <img src="https://cdn.futura-sciences.com/sources/images/AI-creation.jpg" alt=""/> Example for React
             </h1>
         </div>
     </main>

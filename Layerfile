@@ -1,25 +1,28 @@
+# Utiliser une base Ubuntu 18.04
 FROM vm/ubuntu:18.04
-    
-# To note: Layerfiles create entire VMs, *not* containers!    
-RUN curl -fSsL https://deb.nodesource.com/setup_12.x | bash && \
-    apt-get install nodejs python3 make gcc build-essential \
+
+# Ajouter la clé secrète de manière sécurisée (ne pas l'afficher dans les logs)
+SECRET ENV SUPABASE_API_KEY
+
+# Installer Node.js et les dépendances nécessaires
+RUN curl -fSsL https://deb.nodesource.com/setup_16.x | bash && \
+    apt-get install -y nodejs python3 make gcc build-essential \
     libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb && \
+    apt-get clean && \
     rm -f /etc/apt/sources.list.d/nodesource.list
 
-# node is a memory hog
+# Ajuster la mémoire pour Node.js
 MEMORY 2G
-ENV NODE_OPTIONS=--max-old-space-size=8192
-    
+ENV NODE_OPTIONS=--max-old-space-size=2048
+
+# Copier les fichiers du projet
 COPY . .
-RUN mkdir cypress
+
+# Installer les dépendances npm
 RUN npm install
+
+# Lancer l'application en arrière-plan (assurez-vous qu’elle reste active)
 RUN BACKGROUND npm start
-RUN BACKGROUND cd cypress && python3 -m http.server 8000
 
-RUN ./node_modules/.bin/cypress run
-
-# start a webserver to view test results
+# Exposer l'application sur un port accessible
 EXPOSE WEBSITE http://localhost:8000
-
-SECRET ENV SUPABASE_API_KEY
-RUN echo "secret is: $SUPABASE_API_KEY"

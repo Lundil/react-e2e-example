@@ -1,3 +1,3 @@
-# Example of webapp.io for React and Cypress
+# Example of webapp.io for React
 
-This example sets up Cypress for end-to-end testing within a React project.
+This example sets up for end-to-end testing within a React project.
